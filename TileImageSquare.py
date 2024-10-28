@@ -126,14 +126,3 @@ class ImageUntileSquare:
         return(out, )
 
         # return(out, overlap_x, overlap_y, cols, rows, out_h, out_w)
-
-
-NODE_CLASS_MAPPINGS = {
-    "ImageTileSquare": ImageTileSquare,
-    "ImageUntileSquare": ImageUntileSquare,
-}
-
-NODE_DISPLAY_NAME_MAPPINGS = {
-    "ImageTileSquare": "Image Tile Square",
-    "ImageUntileSquare": "Image Untile Square",
-}

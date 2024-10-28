@@ -198,10 +198,3 @@ class RelightX:
 
         return (relit, diffuse_with_specular, points, unit_sphere )
 
-NODE_CLASS_MAPPINGS = {
-    "RelightX": RelightX,
-}
-
-NODE_DISPLAY_NAME_MAPPINGS = {
-    "RelightX": "RelightX",
-}
