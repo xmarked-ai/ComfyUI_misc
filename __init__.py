@@ -1,15 +1,16 @@
-NODE_CLASS_MAPPINGS = {
-    "RelightX": RelightX,
-    "ImageTileSquare": ImageTileSquare,
-    "ImageUntileSquare": ImageUntileSquare,
-}
-
-NODE_DISPLAY_NAME_MAPPINGS = {
-    "RelightX": "RelightX",
-    "ImageTileSquare": "Image Tile Square",
-    "ImageUntileSquare": "Image Untile Square",
-}
+from .RelightX import RELIGHT_CLASS_MAPPINGS, RELIGHT_NAME_MAPPINGS
+from .TileImageSquare import TILE_CLASS_MAPPINGS, TILE_NAME_MAPPINGS
 
 WEB_DIRECTORY = "./js"
 
-__all__ = ['NODE_CLASS_MAPPINGS', 'NODE_DISPLAY_NAME_MAPPINGS']
+NODE_CLASS_MAPPINGS = {}
+NODE_DISPLAY_NAME_MAPPINGS = {}
+
+NODE_CLASS_MAPPINGS.update(RELIGHT_CLASS_MAPPINGS)
+NODE_DISPLAY_NAME_MAPPINGS.update(RELIGHT_NAME_MAPPINGS)
+
+NODE_CLASS_MAPPINGS.update(TILE_CLASS_MAPPINGS)
+NODE_DISPLAY_NAME_MAPPINGS.update(TILE_NAME_MAPPINGS)
+
+
+__all__ = ['NODE_CLASS_MAPPINGS', 'NODE_DISPLAY_NAME_MAPPINGS', "WEB_DIRECTORY"]
