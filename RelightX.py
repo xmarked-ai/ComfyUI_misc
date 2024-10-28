@@ -198,3 +198,10 @@ class RelightX:
 
         return (relit, diffuse_with_specular, points, unit_sphere )
 
+RELIGHT_CLASS_MAPPINGS = {
+    "RelightX": RelightX,
+}
+
+RELIGHT_NAME_MAPPINGS = {
+    "RelightX": "RelightX",
+}
