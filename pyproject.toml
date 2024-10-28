@@ -1,0 +1,14 @@
+[project]
+name = "comfyui_misc"
+description = "Some nodes for ComfyUI"
+version = "0.1"
+license = { file = "LICENSE" }
+
+[project.urls]
+Repository = "https://github.com/xmarked-ai/ComfyUI_misc"
+#  Used by Comfy Registry https://comfyregistry.org
+
+[tool.comfy]
+PublisherId = "xmarked-ai"
+DisplayName = "ComfyUI_misc"
+Icon = ""
