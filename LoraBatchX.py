@@ -99,7 +99,7 @@ class LoraBatchSamplerX:
                 font_path = os.path.normpath(os.path.join(os.path.dirname(__file__), "font/NotoSans-Regular.ttf"))
                 font = ImageFont.truetype(font_path, size=24)
 
-                text = os.path.splitext(os.path.basename(name))[0]
+                text = os.path.splitext(os.path.basename(name))[0] + "     Sampler: " + sampler_name + "   Scheduler: " + scheduler + "   Steps: " + str(steps)
                 bbox = draw.textbbox((0, 0), text, font=font)
                 text_width = bbox[2] - bbox[0]
                 text_height = bbox[3] - bbox[1]
