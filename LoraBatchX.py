@@ -60,7 +60,8 @@ class LoraBatchSamplerX:
     CATEGORY = "loaders"
 
     def batch_sampler_x(self, model, clip, vae, seed, steps, cfg, sampler_name, scheduler, denoise=1.0, width=1024, height=1024 ,positive="", negative="", loras_dir="", strength_model=1.0, strength_clip=0.0, images_per_row=3, padding=10, print_lora_name=True):
-        names = os.listdir(loras_dir)
+        names = [f for f in os.listdir(loras_dir) if os.path.isfile(os.path.join(loras_dir,f))]
+        names = sorted(names, key=str.casefold)
         label_height = 50
 
         tokens   = clip.tokenize(positive)
