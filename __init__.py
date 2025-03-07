@@ -1,51 +1,44 @@
-from .ColorGrade         import GRADE_CLASS_MAPPINGS, GRADE_NAME_MAPPINGS
-from .RelightX           import RELIGHT_CLASS_MAPPINGS, RELIGHT_NAME_MAPPINGS
-from .TileImageSquare    import TILE_CLASS_MAPPINGS, TILE_NAME_MAPPINGS
-from .DepthDisplaceX     import DEPTHDISPLACE_CLASS_MAPPINGS, DEPTHDISPLACE_NAME_MAPPINGS
-from .NF4_bnb_loaderX    import NF4BNB_CLASS_MAPPINGS, NF4BNB_NAME_MAPPINGS
-from .AceColorFixX       import ACECOLORFIXX_CLASS_MAPPINGS, ACECOLORFIXX_NAME_MAPPINGS
-from .LoraBatchX         import LORAX_CLASS_MAPPINGS, LORAX_NAME_MAPPINGS
-from .KSamplerComboX     import KSAMPLERCOMBOX_CLASS_MAPPINGS, KSAMPLERCOMBOX_NAME_MAPPINGS
-from .EmptyLatentX       import EMPTYLATENTX_CLASS_MAPPINGS, EMPTYLATENTX_NAME_MAPPINGS
-from .RemoveBackgroundX  import RMBG_CLASS_MAPPINGS, RMBG_NAME_MAPPINGS
-from .LoopX              import LOOPX_CLASS_MAPPINGS, LOOPX_NAME_MAPPINGS
+import os
+import importlib.util
 
 WEB_DIRECTORY = "./js"
 
 NODE_CLASS_MAPPINGS = {}
 NODE_DISPLAY_NAME_MAPPINGS = {}
 
-NODE_CLASS_MAPPINGS.update(GRADE_CLASS_MAPPINGS)
-NODE_DISPLAY_NAME_MAPPINGS.update(GRADE_NAME_MAPPINGS)
+current_dir = os.path.dirname(__file__)
 
-NODE_CLASS_MAPPINGS.update(RELIGHT_CLASS_MAPPINGS)
-NODE_DISPLAY_NAME_MAPPINGS.update(RELIGHT_NAME_MAPPINGS)
+for filename in os.listdir(current_dir):
+    if not filename.endswith(".py") or filename == "__init__.py":
+        continue
 
-NODE_CLASS_MAPPINGS.update(TILE_CLASS_MAPPINGS)
-NODE_DISPLAY_NAME_MAPPINGS.update(TILE_NAME_MAPPINGS)
+    module_name = filename[:-3]
+    file_path = os.path.join(current_dir, filename)
 
-NODE_CLASS_MAPPINGS.update(DEPTHDISPLACE_CLASS_MAPPINGS)
-NODE_DISPLAY_NAME_MAPPINGS.update(DEPTHDISPLACE_NAME_MAPPINGS)
+    spec = importlib.util.spec_from_file_location(module_name, file_path)
+    module = importlib.util.module_from_spec(spec)
 
-NODE_CLASS_MAPPINGS.update(NF4BNB_CLASS_MAPPINGS)
-NODE_DISPLAY_NAME_MAPPINGS.update(NF4BNB_NAME_MAPPINGS)
+    try:
+        spec.loader.exec_module(module)
+    except ImportError:
+        continue
 
-NODE_CLASS_MAPPINGS.update(ACECOLORFIXX_CLASS_MAPPINGS)
-NODE_DISPLAY_NAME_MAPPINGS.update(ACECOLORFIXX_NAME_MAPPINGS)
+    found_mappings = False
 
-NODE_CLASS_MAPPINGS.update(KSAMPLERCOMBOX_CLASS_MAPPINGS)
-NODE_DISPLAY_NAME_MAPPINGS.update(KSAMPLERCOMBOX_NAME_MAPPINGS)
+    for attr_name in dir(module):
+        if attr_name.endswith("_CLASS_MAPPINGS"):
+            class_mappings = getattr(module, attr_name, None)
+            if isinstance(class_mappings, dict):
+                NODE_CLASS_MAPPINGS.update(class_mappings)
+                found_mappings = True
 
-NODE_CLASS_MAPPINGS.update(LORAX_CLASS_MAPPINGS)
-NODE_DISPLAY_NAME_MAPPINGS.update(LORAX_NAME_MAPPINGS)
+        elif attr_name.endswith("_NAME_MAPPINGS"):
+            name_mappings = getattr(module, attr_name, None)
+            if isinstance(name_mappings, dict):
+                NODE_DISPLAY_NAME_MAPPINGS.update(name_mappings)
+                found_mappings = True
 
-NODE_CLASS_MAPPINGS.update(EMPTYLATENTX_CLASS_MAPPINGS)
-NODE_DISPLAY_NAME_MAPPINGS.update(EMPTYLATENTX_NAME_MAPPINGS)
-
-NODE_CLASS_MAPPINGS.update(RMBG_CLASS_MAPPINGS)
-NODE_DISPLAY_NAME_MAPPINGS.update(RMBG_NAME_MAPPINGS)
-
-NODE_CLASS_MAPPINGS.update(LOOPX_CLASS_MAPPINGS)
-NODE_DISPLAY_NAME_MAPPINGS.update(LOOPX_NAME_MAPPINGS)
+    if not found_mappings:
+        continue
 
 __all__ = ['NODE_CLASS_MAPPINGS', 'NODE_DISPLAY_NAME_MAPPINGS', "WEB_DIRECTORY"]
