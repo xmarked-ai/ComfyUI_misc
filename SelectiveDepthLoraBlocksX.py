@@ -50,7 +50,7 @@ class SelectiveDepthLoraBlocksX:
 
     RETURN_TYPES = ("MODEL", "CLIP")
     FUNCTION = "apply_selective_lora"
-    CATEGORY = "loaders"
+    CATEGORY = "xmtools/nodes"
 
     def _get_component_type(self, key):
         """Определяет тип компонента на основе его ключа"""

@@ -37,7 +37,7 @@ class RelightX:
     RETURN_NAMES = ("IMAGE", "light", "points", "unit_sphere")
     FUNCTION = "relightx"
 
-    CATEGORY = "image/filters"
+    CATEGORY = "xmtools/nodes"
 
     def relightx(self, image, normals, depth, light_x, light_y, light_z, brightness=1, specular_brightness=0.75, specular_size=50, light_type=False, invert_x_normals=False, light_wrap=0, light_wrap_type=False, depth_of_depth=1, environment_map=None, env_gamma=1, env_gain=1, env_shift_x=0, env_shift_y=0):
         if image.shape[0] != normals.shape[0]:

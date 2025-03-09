@@ -24,7 +24,7 @@ class RemoveBackgroundX:
             "required": {
                 "image": ("IMAGE",),
                 "auto_resolution": ("BOOLEAN", {"default": True, "label_on": "get from image", "label_off": "use value below", "forceInput": False}),
-                "processing_resolution": ("INT", {"default": 1024, "min": 64, "max": 4096, "step": 64}),
+                "processing_resolution": ("INT", {"default": 1024, "min": 64, "max": 4096, "step": 32}),
                 "mask_blur": ("FLOAT", {"default": 0.0, "min": 0, "max": 100, "step": 0.1}),
                 "mask_feather_type": ("BOOLEAN", {"default": True, "label_on": "gamma", "label_off": "adaptive erode", "forceInput": False}),
                 "feather_size": ("FLOAT", {"default": 0, "min": -1.0, "max": 50.0, "step": 0.1}),

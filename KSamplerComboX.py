@@ -60,8 +60,7 @@ class KSamplerComboX:
 
     RETURN_TYPES = ("IMAGE",)
     FUNCTION = "ksampler_combo_x"
-
-    CATEGORY = "loaders"
+    CATEGORY = "xmtools/nodes"
 
     def ksampler_combo_x(self, model, clip, vae, seed, steps, cfg, sampler_name, scheduler, denoise=1.0, flux=True, max_shift=1.15, base_shift=0.5, guidance=3.5, width=1024, height=1024 ,positive="", negative="", lora_name="", strength_model=1.0, strength_clip=0.0):
 
