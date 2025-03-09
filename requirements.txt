@@ -1,2 +1,8 @@
 torch
+torchvision
 bitsandbytes>=0.44.0
+numpy
+pillow
+transformers
+huggingface_hub
+openai

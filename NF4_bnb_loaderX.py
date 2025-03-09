@@ -220,7 +220,7 @@ class NF4ModelPatcher(ModelPatcher):
             bnb_quantized = weight.bnb_quantized
             module = weight.module
             weight = functional_dequantize_4bit(weight)
-            
+
         temp_weight = weight.to(torch.device('cuda'), copy=True, non_blocking=False).to(torch.float32)
 
         out_weight = comfy.lora.calculate_weight(self.patches[key], temp_weight, key)
@@ -249,12 +249,12 @@ class NF4ModelPatcher(ModelPatcher):
         )
 
         weight = weight._quantize(weight_original_device)
-        
+
         if weight_original_device.type == 'cuda':
             weight = weight.to(weight_original_device)
         else:
             weight = weight.cuda().to(weight_original_device)
-        
+
         return weight
 
     def clone(self, *args, **kwargs):
@@ -314,8 +314,7 @@ class CheckpointLoaderBNB_X:
 
     RETURN_TYPES = ("MODEL", "CLIP", "VAE")
     FUNCTION = "load_checkpoint"
-
-    CATEGORY = "loaders"
+    CATEGORY = "xmtools/nodes"
 
     def load_checkpoint(self, ckpt_name, load_clip, load_vae, bnb_dtype="nf4"):
         if bnb_dtype == "default":
@@ -327,7 +326,7 @@ class CheckpointLoaderBNB_X:
         model = NF4ModelPatcher.clone(model)
 
         return model, clip, vae
-    
+
 class UnetLoaderBNB_X:
     @classmethod
     def INPUT_TYPES(s):
@@ -339,7 +338,7 @@ class UnetLoaderBNB_X:
     RETURN_TYPES = ("MODEL",)
     FUNCTION = "load_checkpoint"
 
-    CATEGORY = "loaders"
+    CATEGORY = "xmtools/nodes"
 
     def load_checkpoint(self, unet_name, bnb_dtype="nf4"):
         if bnb_dtype == "default":
@@ -350,7 +349,7 @@ class UnetLoaderBNB_X:
 
         model = NF4ModelPatcher.clone(model)
 
-        return model, 
+        return model,
 
 class CheckpointLoaderNF4_X(CheckpointLoaderBNB_X):
     @classmethod

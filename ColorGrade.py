@@ -17,7 +17,7 @@ class WhiteBalanceX:
     RETURN_TYPES = ("IMAGE", "IMAGE")
     RETURN_NAMES = ("IMAGE_RGB", "IMAGE_XYZ")
     FUNCTION = "whitebalance"
-    CATEGORY = "xmtools/image manipulation"
+    CATEGORY = "xmtools/nodes"
 
     def whitebalance(self, image, color_red, color_green, color_blue, color_space):
         # Conversion matrices RGB to XYZ and XYZ to RGB (CIE 1931 2° observer)

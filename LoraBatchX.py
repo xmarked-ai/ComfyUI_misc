@@ -62,8 +62,7 @@ class LoraBatchSamplerX:
     RETURN_TYPES = ("IMAGE",)
     OUTPUT_IS_LIST = (True,)
     FUNCTION = "batch_sampler_x"
-
-    CATEGORY = "loaders"
+    CATEGORY = "xmtools/nodes"
 
     def batch_sampler_x(self, model, clip, vae, seed, steps, cfg, sampler_name, scheduler, denoise=1.0, flux=True, max_shift=1.15, base_shift=0.5, guidance=3.5, width=1024, height=1024 ,positive="", negative="", loras_dir="", strength_model=1.0, strength_clip=0.0, images_per_row=3, padding=10, print_lora_name=True):
         names = [f for f in os.listdir(loras_dir) if os.path.isfile(os.path.join(loras_dir,f))]

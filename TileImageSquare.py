@@ -15,7 +15,7 @@ class ImageTileSquare:
     RETURN_TYPES = ("IMAGE", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT", "INT")
     RETURN_NAMES = ("IMAGE", "tile_size", "overlap_x", "overlap_y", "cols", "rows", "scr_w", "src_h", "croped_w", "croped_h")
     FUNCTION = "execute"
-    CATEGORY = "xmtools/image manipulation"
+    CATEGORY = "xmtools/nodes"
 
     def execute(self, image, tile_size, min_overlap):
         w, h = image.shape[1:3]
@@ -87,7 +87,7 @@ class ImageUntileSquare:
     # RETURN_NAMES = ("IMAGE", "overlap_x", "overlap_y", "cols", "rows", "out_h", "out_w")
     RETURN_TYPES = ("IMAGE",)
     FUNCTION = "execute"
-    CATEGORY = "xmtools/image manipulation"
+    CATEGORY = "xmtools/nodes"
 
     def execute(self, tiles, overlap_x, overlap_y, cols, rows):
         tile_w, tile_h = tiles.shape[1:3]
@@ -118,7 +118,7 @@ class ImageUntileSquare:
                 # feather the overlap on right
                 #if j < cols - 1:
                 #    mask[:, :, -overlap_x:] *= torch.linspace(1, 0, overlap_x, device=tiles.device, dtype=tiles.dtype).unsqueeze(0)
-                
+
                 mask = mask.unsqueeze(-1).repeat(1, 1, 1, tiles.shape[3])
                 tile = tiles[j * cols + i] * mask
                 out[:, y1:y2, x1:x2, :] = out[:, y1:y2, x1:x2, :] * (1 - mask) + tile

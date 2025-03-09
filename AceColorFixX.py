@@ -191,7 +191,7 @@ class AceColorFixX:
 
     RETURN_TYPES = ("IMAGE",)
     FUNCTION = "execute"
-    CATEGORY = "Ace Nodes"
+    CATEGORY = "xmtools/nodes"
 
     def execute(self, images, color_map_images, color_fix):
         color_fix_func = (

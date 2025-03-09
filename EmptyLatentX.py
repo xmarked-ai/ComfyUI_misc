@@ -19,7 +19,7 @@ class EmptyLatentX:
     RETURN_NAMES = ("LATENT", "width", "height",)
 
     FUNCTION = "main"
-    CATEGORY = 'xmtools/nodes'
+    CATEGORY = "xmtools/nodes"
 
     def main(self, width, height, batch_size=1):
         latent = torch.zeros([batch_size, 16, height // 8, width // 8], device=self.device)
