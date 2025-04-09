@@ -65,8 +65,11 @@ class LoraBatchSamplerX:
     CATEGORY = "xmtools/nodes"
 
     def batch_sampler_x(self, model, clip, vae, seed, steps, cfg, sampler_name, scheduler, denoise=1.0, flux=True, max_shift=1.15, base_shift=0.5, guidance=3.5, width=1024, height=1024 ,positive="", negative="", loras_dir="", strength_model=1.0, strength_clip=0.0, images_per_row=3, padding=10, print_lora_name=True):
+        # names = [f for f in os.listdir(loras_dir) if os.path.isfile(os.path.join(loras_dir,f))]
+        # names = sorted(names, key=str.casefold)
         names = [f for f in os.listdir(loras_dir) if os.path.isfile(os.path.join(loras_dir,f))]
-        names = sorted(names, key=str.casefold)
+        names = sorted(names, key=lambda x: os.path.getmtime(os.path.join(loras_dir, x)))
+
         label_height = 50
 
         latent_image = {"samples":torch.zeros([1, 16, height // 8  , width // 8], device=comfy.model_management.intermediate_device())}
