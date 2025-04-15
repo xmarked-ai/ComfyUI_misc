@@ -1,3 +1,4 @@
+#### Copy from Ace Nodes
 import os
 import re
 import torch
@@ -221,7 +222,7 @@ ACECOLORFIXX_CLASS_MAPPINGS = {
 }
 
 ACECOLORFIXX_NAME_MAPPINGS = {
-    "AceIntegerX"          : "Ace IntegerX",
-    "AceFloatX"            : "Ace FloatX",
-    "AceColorFixX"         : "Ace Color FixX",
+    "AceIntegerX"          : "Ace Integer X",
+    "AceFloatX"            : "Ace Float X",
+    "AceColorFixX"         : "Ace Color Fix X",
  }

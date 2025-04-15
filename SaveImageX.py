@@ -39,7 +39,7 @@ class SaveImageX:
     RETURN_NAMES = ("images",)
     FUNCTION = "save_images"
     OUTPUT_NODE = True
-    CATEGORY = "image"
+    CATEGORY = "xmtools/nodes"
 
     def save_images(self, images, filename_prefix="ComfyUI", subdirectory="", compress_level=4, show_preview=True, prompt=None, extra_pnginfo=None):
         full_output_dir = self.output_dir

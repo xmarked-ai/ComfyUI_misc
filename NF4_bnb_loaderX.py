@@ -337,7 +337,6 @@ class UnetLoaderBNB_X:
 
     RETURN_TYPES = ("MODEL",)
     FUNCTION = "load_checkpoint"
-
     CATEGORY = "xmtools/nodes"
 
     def load_checkpoint(self, unet_name, bnb_dtype="nf4"):
