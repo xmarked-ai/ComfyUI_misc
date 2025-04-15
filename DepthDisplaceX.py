@@ -26,7 +26,6 @@ class DepthDisplaceX:
     RETURN_TYPES = ("IMAGE", "MASK", "IMAGE", "INT", "INT",)
     RETURN_NAMES = ("IMAGE", "MASK", "composed_image", "offset_x", "offset_y",)
     FUNCTION = "depthdisplace"
-
     CATEGORY = "xmtools/nodes"
 
     def depthdisplace(self, image, depth_map, strength, blur_depth, offset_x=0, offset_y=0, mask=None, background=None):

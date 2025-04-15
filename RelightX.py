@@ -3,7 +3,6 @@ from torchvision import transforms
 import PIL.Image
 import numpy as np
 import math
-import cv2
 
 class RelightX:
     @classmethod
@@ -13,9 +12,6 @@ class RelightX:
                 "image": ("IMAGE",),
                 "normals": ("IMAGE",),
                 "depth": ("IMAGE",),
-                "normal_smooth_enabled": ("BOOLEAN", {"default": True, "label_on": "ON", "label_off": "OFF"}),
-                "normal_smooth_sigma_s": ("FLOAT", {"default": 10.0, "min": 1.0, "max": 50.0, "step": 1.0}),
-                "normal_smooth_sigma_r": ("FLOAT", {"default": 0.1, "min": 0.01, "max": 0.5, "step": 0.01}),
                 "light_x": ("FLOAT", {"default": 0.0, "min": -10, "max": 10, "step": 0.01}),
                 "light_y": ("FLOAT", {"default": 0.0, "min": -10, "max": 10, "step": 0.01}),
                 "light_z": ("FLOAT", {"default": -1.0, "min": -10, "max": 10, "step": 0.01}),
@@ -37,13 +33,12 @@ class RelightX:
             }
         }
 
-    RETURN_TYPES = ("IMAGE", "IMAGE", "IMAGE", "IMAGE", "IMAGE")
-    RETURN_NAMES = ("IMAGE", "light", "points", "unit_sphere", "DEBUG_NORMALS")
+    RETURN_TYPES = ("IMAGE", "IMAGE", "IMAGE", "IMAGE")
+    RETURN_NAMES = ("IMAGE", "light", "points", "unit_sphere")
     FUNCTION = "relightx"
-
     CATEGORY = "xmtools/nodes"
 
-    def relightx(self, image, normals, depth, normal_smooth_sigma_s, normal_smooth_sigma_r, normal_smooth_enabled, light_x, light_y, light_z, brightness=1, specular_brightness=0.75, specular_size=50, light_type=False, invert_x_normals=False, light_wrap=0, light_wrap_type=False, depth_of_depth=1, environment_map=None, env_gamma=1, env_gain=1, env_shift_x=0, env_shift_y=0):
+    def relightx(self, image, normals, depth, light_x, light_y, light_z, brightness=1, specular_brightness=0.75, specular_size=50, light_type=False, invert_x_normals=False, light_wrap=0, light_wrap_type=False, depth_of_depth=1, environment_map=None, env_gamma=1, env_gain=1, env_shift_x=0, env_shift_y=0):
         if image.shape[0] != normals.shape[0]:
             raise Exception("Batch size for image and normals must match")
 
@@ -51,24 +46,7 @@ class RelightX:
         cmin = min(w,h)
         cmax = max(w,h)
 
-        if normal_smooth_enabled:
-            norm_np = normals.cpu().numpy()[0].copy()
-            norm_np = (norm_np * 255).astype(np.uint8)
-
-            for i in range(3):
-                norm_np[..., i] = cv2.edgePreservingFilter(
-                    norm_np[..., i],
-                    flags=cv2.RECURS_FILTER,
-                    sigma_s=normal_smooth_sigma_s,
-                    sigma_r=normal_smooth_sigma_r
-                )
-
-            norm_pre = torch.from_numpy(norm_np.astype(np.float32) / 255.0).to(normals.device)
-            norm_pre = norm_pre.unsqueeze(0)
-        else:
-            norm_pre = normals.detach().clone()
-
-        norm = norm_pre.detach().clone() * 2 - 1
+        norm = normals.detach().clone() * 2 - 1
         if invert_x_normals:
             norm[:, :, :, 0] = -norm[:, :, :, 0]
 
@@ -217,7 +195,7 @@ class RelightX:
         if brightness > 0 or specular_brightness > 0:
             relit[:,:,:,:3] = torch.clip(relit[:,:,:,:3] * diffuse_with_specular, 0, 1)
 
-        return (relit, diffuse_with_specular, points, unit_sphere, norm_pre, )
+        return (relit, diffuse_with_specular, points, unit_sphere )
 
 RELIGHT_CLASS_MAPPINGS = {
     "RelightX": RelightX,

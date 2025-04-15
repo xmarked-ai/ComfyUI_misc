@@ -35,7 +35,6 @@ class RemoveBackgroundX:
     RETURN_TYPES = ("IMAGE", "MASK", "IMAGE", "IMAGE",)
     RETURN_NAMES = ("IMAGE", "MASK", "masked image (with alpha)", "mask as an image",)
     FUNCTION = "remove_backgroundX"
-
     CATEGORY = "xmtools/nodes"
 
     def check_and_download_rmbg(self):

@@ -183,10 +183,8 @@ class SelectiveDepthLoraBlocksX:
                 modified_lora_sd[key] = value
 
         # Логируем средние значения примененных масштабов по типам
-        print("Applied selective scaling to LoRA weights:")
         for component_type, scales in applied_scales.items():
             avg_scale = sum(scales) / len(scales) if scales else 0
-            print(f"  {component_type}: average scale = {avg_scale:.3f} (from {len(scales)} components)")
 
         return modified_lora_sd
 
