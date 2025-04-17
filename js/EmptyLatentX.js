@@ -1,17 +1,17 @@
 import { app } from "../../scripts/app.js";
 
 class EmptyLatentX {
-    static BUTTON_BASE_SIZE = 30;
-    static BUTTON_LONG_SIDE = 45;
-    static BUTTON_MARGIN = 16;
+    static BUTTON_BASE_SIZE = 28;
+    static BUTTON_LONG_SIDE = 38;
+    static BUTTON_MARGIN = 10;
     static BUTTONS_Y = 155;
-    static PRESET_BUTTON_WIDTH = 84;
-    static PRESET_BUTTON_HEIGHT = 30;
+    static PRESET_BUTTON_WIDTH = 64;
+    static PRESET_BUTTON_HEIGHT = 24;
     static PRESETS_PER_ROW = 4;
 
     constructor(node) {
         this.node = node;
-        this.node.size = [388, 307];
+        this.node.size = [306, 290];
         this.squareSize = 30;
         this.isActive = false;
 
@@ -328,7 +328,7 @@ class EmptyLatentX {
     drawButtonText(ctx, text, x, y) {
         ctx.save();
         ctx.fillStyle = "#ffffff";
-        ctx.font = "14px Arial";
+        ctx.font = "11px Arial";
         ctx.textAlign = "center";
         ctx.textBaseline = "middle";
         ctx.fillText(text, x, y);
@@ -341,7 +341,7 @@ app.registerExtension({
     async beforeRegisterNodeDef(nodeType, nodeData, _app) {
         if (nodeData.name === "EmptyLatentX") {
             nodeType.prototype.computeSize = function() {
-                return [388, 307];
+                return [306, 290];
             };
 
             const onNodeCreated = nodeType.prototype.onNodeCreated;

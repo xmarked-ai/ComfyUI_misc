@@ -17,6 +17,7 @@ class ExpressionsX:
                 "z2": ("FLOAT", {"default": 0.5, "min": -10000.0, "max": 10000.0, "step": 0.01}),
                 "z3": ("FLOAT", {"default": 0.5, "min": -10000.0, "max": 10000.0, "step": 0.01}),
                 "z4": ("FLOAT", {"default": 0.5, "min": -10000.0, "max": 10000.0, "step": 0.01}),
+                "z5": ("FLOAT", {"default": 0.5, "min": -10000.0, "max": 10000.0, "step": 0.01}),
             },
             "optional": {
                 "A": ("IMAGE",),
@@ -63,7 +64,7 @@ class ExpressionsX:
             else:
                 return np.zeros_like(context['B_r'])
 
-    def process_expression(self, r_expression="", g_expression="", b_expression="", mask_expression="", z1=0.5, z2=0.5, z3=0.5, z4=0.5, A=None, B=None, A_mask=None, B_mask=None):
+    def process_expression(self, r_expression="", g_expression="", b_expression="", mask_expression="", z1=0.5, z2=0.5, z3=0.5, z4=0.5, z5=0.5, A=None, B=None, A_mask=None, B_mask=None):
         # Check if we have at least B or B_mask
         if B is None and B_mask is None:
             raise ValueError("Error: At least B image or B_mask must be provided")
@@ -177,6 +178,7 @@ class ExpressionsX:
             "z2": z2,
             "z3": z3,
             "z4": z4,
+            "z5": z5,
             "min": np.minimum,
             "max": np.maximum,
             "floor": np.floor,
