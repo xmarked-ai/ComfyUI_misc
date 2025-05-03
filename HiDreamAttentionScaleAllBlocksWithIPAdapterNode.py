@@ -1,0 +1,195 @@
+import torch
+import torch.nn as nn
+import copy
+import logging
+
+class HiDreamAttentionScaleAllBlocksWithIPAdapterNode:
+    @classmethod
+    def INPUT_TYPES(cls):
+        inputs = {
+            "required": {
+                "model": ("MODEL",),
+            },
+            "optional": {
+                "cond_embeddings": ("CLIP_VISION_OUTPUT",),
+            },
+        }
+
+        # Add scale parameters for double blocks (text tokens)
+        for i in range(16):
+            inputs["required"][f"scale_double_text_{i}"] = ("FLOAT", {"default": 1.0, "min": 0.0, "max": 5.0, "step": 0.01})
+
+        # Add scale parameters for double blocks (image tokens)
+        for i in range(16):
+            inputs["required"][f"scale_double_image_{i}"] = ("FLOAT", {"default": 1.0, "min": 0.0, "max": 5.0, "step": 0.01})
+
+        # Add scale parameters for single blocks
+        for i in range(32):
+            inputs["required"][f"scale_single_block_{i}"] = ("FLOAT", {"default": 1.0, "min": 0.0, "max": 5.0, "step": 0.01})
+
+        return inputs
+
+    RETURN_TYPES = ("MODEL",)
+    FUNCTION = "scale_attention_with_ipadapter"
+    CATEGORY = "HiDream"
+
+    def scale_attention_with_ipadapter(self, model, cond_embeddings=None, **kwargs):
+        if not hasattr(model.model, "diffusion_model") or not hasattr(model.model.diffusion_model, "double_stream_blocks"):
+            raise ValueError("Model must be a HiDream model")
+
+        # Extract scale values for both block types
+        double_text_scales = [kwargs[f"scale_double_text_{i}"] for i in range(16)]
+        double_image_scales = [kwargs[f"scale_double_image_{i}"] for i in range(16)]
+        single_scales = [kwargs[f"scale_single_block_{i}"] for i in range(32)]
+
+        model_clone = copy.deepcopy(model)
+
+        # Process conditioning embeddings if provided
+        cond_emb = None
+        if cond_embeddings is not None:
+            # Extract embeddings with robust handling
+            if hasattr(cond_embeddings, 'last_hidden_state'):
+                cond_emb = cond_embeddings.last_hidden_state
+            elif hasattr(cond_embeddings, 'hidden_states'):
+                cond_emb = cond_embeddings.hidden_states[-1]  # Take the last layer
+            elif isinstance(cond_embeddings, torch.Tensor):
+                cond_emb = cond_embeddings
+            else:
+                raise ValueError(f"Unsupported CLIP_VISION_OUTPUT type: {type(cond_embeddings)}")
+
+            print(f"Original cond_emb shape: {cond_emb.shape}")
+
+            if not isinstance(cond_emb, torch.Tensor):
+                raise ValueError("cond_emb must be a tensor")
+
+        # Define dimensions
+        text_dim = 2560  # Standard text dimension for HiDream models
+        cond_dim = cond_emb.shape[-1] if cond_emb is not None else text_dim
+        image_dim = model_clone.model.diffusion_model.single_stream_blocks[0].block.attn1.to_q.weight.shape[1]
+
+        # Patch double_stream_blocks (text + image tokens)
+        for i, block in enumerate(model_clone.model.diffusion_model.double_stream_blocks):
+            attn = block.block.attn1
+            original_processor = attn.processor
+
+            # Create processor with properly captured variables for double blocks
+            class IPAdapterDoubleProcessor:
+                def __init__(self, text_scale, image_scale, original_proc, cond_embedding=None,
+                             cond_dim=cond_dim, text_dim=text_dim):
+                    self.text_scale = text_scale
+                    self.image_scale = image_scale
+                    self.original_processor = original_proc
+                    self.cond_emb = cond_embedding
+                    self.projection = None
+
+                    if self.cond_emb is not None:
+                        self.projection = nn.Linear(cond_dim, text_dim, bias=False)
+                        self.projection = self.projection.to(self.cond_emb.device, self.cond_emb.dtype)
+                        nn.init.kaiming_uniform_(self.projection.weight, a=0.02)
+
+                def __call__(self, attn, image_tokens, image_tokens_masks=None, text_tokens=None, rope=None, *args, **kwargs):
+                    if text_tokens is None:
+                        return self.original_processor(attn, image_tokens, image_tokens_masks, text_tokens, rope, *args, **kwargs)
+
+                    # Масштабируем image_tokens в любом случае
+                    scaled_image_tokens = image_tokens * self.image_scale
+
+                    # Обработка text_tokens зависит от наличия cond_embeddings
+                    if self.cond_emb is None:
+                        # Масштабируем text_tokens когда нет условных эмбеддингов
+                        scaled_text_tokens = text_tokens * self.text_scale
+                        return self.original_processor(attn, scaled_image_tokens, image_tokens_masks,
+                                                      scaled_text_tokens, rope, *args, **kwargs)
+
+                    batch_size = image_tokens.shape[0]
+                    text_seq_len = text_tokens.shape[1]
+                    print(f"Double block: text_tokens sequence length = {text_seq_len}")
+
+                    # Project and prepare conditional embeddings
+                    cond_emb_batched = self.projection(self.cond_emb.expand(batch_size, -1, -1))
+                    cond_emb_batched = cond_emb_batched.to(text_tokens.device, text_tokens.dtype)
+
+                    # Adjust sequence length to match text_tokens
+                    cond_seq_len = cond_emb_batched.shape[1]
+                    print(f"Double block: cond_emb sequence length before adjustment = {cond_seq_len}")
+                    if cond_seq_len < text_seq_len:
+                        repeat_times = (text_seq_len + cond_seq_len - 1) // cond_seq_len
+                        cond_emb_batched = cond_emb_batched.repeat(1, repeat_times, 1)[:, :text_seq_len, :]
+                    elif cond_seq_len > text_seq_len:
+                        cond_emb_batched = cond_emb_batched[:, :text_seq_len, :]
+
+                    # Combine text tokens with scaled conditional embeddings
+                    combined_tokens = text_tokens + self.text_scale * cond_emb_batched
+
+                    return self.original_processor(attn, scaled_image_tokens, image_tokens_masks,
+                                                  combined_tokens, rope, *args, **kwargs)
+
+            # Create processor instance for this double block
+            attn.processor = IPAdapterDoubleProcessor(
+                double_text_scales[i],
+                double_image_scales[i],
+                original_processor,
+                cond_emb,
+                cond_dim,
+                text_dim
+            )
+
+        # Patch single_stream_blocks (image tokens only)
+        for i, block in enumerate(model_clone.model.diffusion_model.single_stream_blocks):
+            attn = block.block.attn1
+            original_processor = attn.processor
+
+            # Create processor with properly captured variables for single blocks
+            class IPAdapterSingleProcessor:
+                def __init__(self, scale_value, original_proc, cond_embedding=None, cond_dim=cond_dim, image_dim=image_dim):
+                    self.scale = scale_value
+                    self.original_processor = original_proc
+                    self.cond_emb = cond_embedding
+                    self.projection = None
+
+                    if self.cond_emb is not None:
+                        # For single blocks, we project to image dimension instead of text dimension
+                        self.projection = nn.Linear(cond_dim, image_dim, bias=False)
+                        self.projection = self.projection.to(self.cond_emb.device, self.cond_emb.dtype)
+                        nn.init.kaiming_uniform_(self.projection.weight, a=0.02)
+
+                def __call__(self, attn, image_tokens, image_tokens_masks=None, text_tokens=None, rope=None, *args, **kwargs):
+                    # For single blocks, we always scale the image tokens
+                    if self.cond_emb is None:
+                        scaled_image_tokens = image_tokens * self.scale
+                        return self.original_processor(attn, scaled_image_tokens, image_tokens_masks, text_tokens, rope, *args, **kwargs)
+
+                    batch_size = image_tokens.shape[0]
+                    image_seq_len = image_tokens.shape[1]
+                    print(f"Single block: image_tokens sequence length = {image_seq_len}")
+
+                    # Project and prepare conditional embeddings for image tokens
+                    cond_emb_batched = self.projection(self.cond_emb.expand(batch_size, -1, -1))
+                    cond_emb_batched = cond_emb_batched.to(image_tokens.device, image_tokens.dtype)
+
+                    # Adjust sequence length to match image_tokens
+                    cond_seq_len = cond_emb_batched.shape[1]
+                    print(f"Single block: cond_emb sequence length before adjustment = {cond_seq_len}")
+                    if cond_seq_len < image_seq_len:
+                        repeat_times = (image_seq_len + cond_seq_len - 1) // cond_seq_len
+                        cond_emb_batched = cond_emb_batched.repeat(1, repeat_times, 1)[:, :image_seq_len, :]
+                    elif cond_seq_len > image_seq_len:
+                        cond_emb_batched = cond_emb_batched[:, :image_seq_len, :]
+
+                    # Only add scaled conditional embeddings, without scaling the base image tokens
+                    combined_tokens = image_tokens + self.scale * cond_emb_batched
+
+                    return self.original_processor(attn, combined_tokens, image_tokens_masks, text_tokens, rope, *args, **kwargs)
+
+            # Create processor instance for this single block
+            attn.processor = IPAdapterSingleProcessor(single_scales[i], original_processor, cond_emb, cond_dim, image_dim)
+
+        return (model_clone,)
+
+NODE_CLASS_MAPPINGS = {
+    "HiDreamAttentionScaleAllBlocksWithIPAdapterNode": HiDreamAttentionScaleAllBlocksWithIPAdapterNode
+}
+
+NODE_DISPLAY_NAME_MAPPINGS = {
+    "HiDreamAttentionScaleAllBlocksWithIPAdapterNode": "HiDream All Blocks Attention Scale + IP-Adapter"
+}
