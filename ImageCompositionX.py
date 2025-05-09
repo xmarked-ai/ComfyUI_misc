@@ -570,10 +570,10 @@ class ImageCompositionX:
 
         return (result, a_mask, b_mask, result_mask,)
 
-IMAGECOMPOSE_CLASS_MAPPINGS = {
+NODE_CLASS_MAPPINGS = {
     "ImageCompositionX": ImageCompositionX,
 }
 
-IMAGECOMPOSE_NAME_MAPPINGS = {
+NODE_DISPLAY_NAME_MAPPINGS = {
     "ImageCompositionX": "Image Composition X",
 }
