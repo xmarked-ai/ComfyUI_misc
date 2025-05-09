@@ -264,10 +264,10 @@ class ExpressionsX:
 
         return (result_image_tensor, mask_result_tensor,)
 
-EXPRESIIONSX_CLASS_MAPPINGS = {
+NODE_CLASS_MAPPINGS = {
     "ExpressionsX": ExpressionsX
 }
 
-EXPRESIIONSX_NAME_MAPPINGS = {
+NODE_DISPLAY_NAME_MAPPINGS = {
     "ExpressionsX": "Expressions X"
 }
