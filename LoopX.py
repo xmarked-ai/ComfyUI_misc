@@ -210,13 +210,13 @@ class IfConditionX:
             return (FALSE_IN,)
 
 
-LOOPX_CLASS_MAPPINGS = {
+NODE_CLASS_MAPPINGS = {
     "LoopOpenX": LoopOpenX,
     "LoopCloseX": LoopCloseX,
     "IfConditionX": IfConditionX,
 }
 
-LOOPX_NAME_MAPPINGS = {
+NODE_DISPLAY_NAME_MAPPINGS = {
     "LoopOpenX": "Loop Open X",
     "LoopCloseX": "Loop Close X",
     "IfConditionX": "If Condition X",

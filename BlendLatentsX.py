@@ -53,10 +53,10 @@ class BlendLatentsX:
 
         return (result,)
 
-BLENDLATENTS_CLASS_MAPPINGS = {
+NODE_CLASS_MAPPINGS = {
     "BlendLatentsX": BlendLatentsX,
 }
 
-BLENDLATENTS_DISPLAY_NAME_MAPPINGS = {
+NODE_DISPLAY_NAME_MAPPINGS = {
     "BlendLatentsX": "Blend LatentsX",
 }

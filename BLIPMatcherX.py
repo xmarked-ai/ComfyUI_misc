@@ -120,10 +120,10 @@ class BLIPMatcherX:
 
         return (result,)
 
-BLIPMATCHER_CLASS_MAPPINGS = {
+NODE_CLASS_MAPPINGS = {
     "BLIPMatcherX": BLIPMatcherX
 }
 
-BLIPMATCHER_NAME_MAPPINGS = {
+NODE_DISPLAY_NAME_MAPPINGS = {
     "BLIPMatcherX": "BLIP Matcher X"
 }

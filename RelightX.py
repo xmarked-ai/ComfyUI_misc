@@ -12,9 +12,9 @@ class RelightX:
                 "image": ("IMAGE",),
                 "normals": ("IMAGE",),
                 "depth": ("IMAGE",),
-                "light_x": ("FLOAT", {"default": 0.0, "min": -10, "max": 10, "step": 0.01}),
-                "light_y": ("FLOAT", {"default": 0.0, "min": -10, "max": 10, "step": 0.01}),
-                "light_z": ("FLOAT", {"default": -1.0, "min": -10, "max": 10, "step": 0.01}),
+                "light_x": ("FLOAT", {"default": 0.0, "min": -50, "max": 50, "step": 0.01}),
+                "light_y": ("FLOAT", {"default": 0.0, "min": -50, "max": 50, "step": 0.01}),
+                "light_z": ("FLOAT", {"default": -1.0, "min": -50, "max": 50, "step": 0.01}),
                 "brightness": ("FLOAT", {"default": 1.0, "min": 0.0, "max": 100, "step": 0.01}),
                 "specular_brightness": ("FLOAT", {"default": 0.75, "min": 0.0, "max": 100, "step": 0.01}),
                 "specular_size": ("FLOAT", {"default": 50, "min": 0.0, "max": 500, "step": 0.01}),
@@ -197,10 +197,10 @@ class RelightX:
 
         return (relit, diffuse_with_specular, points, unit_sphere )
 
-RELIGHT_CLASS_MAPPINGS = {
+NODE_CLASS_MAPPINGS = {
     "RelightX": RelightX,
 }
 
-RELIGHT_NAME_MAPPINGS = {
+NODE_DISPLAY_NAME_MAPPINGS = {
     "RelightX": "RelightX",
 }

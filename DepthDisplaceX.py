@@ -140,10 +140,10 @@ class DepthDisplaceX:
         return (displaced_image, displaced_mask.squeeze(1), composed_image, offset_x, offset_y)
 
 
-DEPTHDISPLACE_CLASS_MAPPINGS = {
+NODE_CLASS_MAPPINGS = {
     "DepthDisplaceX": DepthDisplaceX,
 }
 
-DEPTHDISPLACE_NAME_MAPPINGS = {
+NODE_DISPLAY_NAME_MAPPINGS = {
     "DepthDisplaceX": "Depth Displace X",
 }

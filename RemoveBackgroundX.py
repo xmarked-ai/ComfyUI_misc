@@ -143,10 +143,10 @@ class RemoveBackgroundX:
 
         return (tensor_input_image, tensor_output_mask, tensor_output_image, mask_as_image)
 
-RMBG_CLASS_MAPPINGS = {
+NODE_CLASS_MAPPINGS = {
     "RemoveBackgroundX": RemoveBackgroundX,
 }
 
-RMBG_NAME_MAPPINGS = {
+NODE_DISPLAY_NAME_MAPPINGS = {
     "RemoveBackgroundX": "Remove Background X",
 }

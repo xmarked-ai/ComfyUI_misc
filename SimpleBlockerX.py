@@ -31,10 +31,10 @@ class SimpleBlockerX:
 
         return (input,)
 
-BLOCKER_CLASS_MAPPINGS = {
+NODE_CLASS_MAPPINGS = {
     "SimpleBlockerX": SimpleBlockerX,
 }
 
-BLOCKER_DISPLAY_NAME_MAPPINGS = {
+NODE_DISPLAY_NAME_MAPPINGS = {
     "SimpleBlockerX": "Simple Blocker X",
 }

@@ -77,10 +77,10 @@ class GaussianMaskBlurX:
 
         return(mask,)
 
-GAUSSBLURMASK_CLASS_MAPPINGS = {
+NODE_CLASS_MAPPINGS = {
     "GaussianMaskBlurX": GaussianMaskBlurX,
 }
 
-GAUSBLURMASK_DISPLAY_NAME_MAPPINGS = {
+NODE_DISPLAY_DISPLAY_NAME_MAPPINGS = {
     "GaussianMaskBlurX": "Gaussian Mask Blur X",
 }

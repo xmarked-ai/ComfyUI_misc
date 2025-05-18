@@ -129,10 +129,10 @@ class GaussianBlurX:
         return (result, mask,)
 
 
-GAUSSBLUR_CLASS_MAPPINGS = {
+NODE_CLASS_MAPPINGS = {
     "GaussianBlurX": GaussianBlurX,
 }
 
-GAUSSBLUR_NAME_MAPPINGS = {
+NODE_DISPLAY_NAME_MAPPINGS = {
     "GaussianBlurX": "Gaussian Blur X",
 }

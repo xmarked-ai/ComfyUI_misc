@@ -157,10 +157,10 @@ class KSamplerComboX:
 
         return (decoded_image,)
 
-KSAMPLERCOMBOX_CLASS_MAPPINGS = {
+NODE_CLASS_MAPPINGS = {
     "KSamplerComboX": KSamplerComboX,
 }
 
-KSAMPLERCOMBOX_NAME_MAPPINGS = {
+NODE_DISPLAY_NAME_MAPPINGS = {
     "KSamplerComboX": "KSampler Combo X",
 }

@@ -356,11 +356,10 @@ class ColorSpaceConversionX:
 
         return (result,)
 
-# Регистрация ноды в ComfyUI
-COLORSPACECONV_CLASS_MAPPINGS = {
+NODE_CLASS_MAPPINGS = {
     "ColorSpaceConversionX": ColorSpaceConversionX
 }
 
-COLORSPACECONV_DISPLAY_NAME_MAPPINGS = {
+NODE_DISPLAY_NAME_MAPPINGS = {
     "ColorSpaceConversionX": "Color Space Conversion X"
 }

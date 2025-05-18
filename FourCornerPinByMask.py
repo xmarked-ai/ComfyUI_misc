@@ -166,10 +166,10 @@ class FourCornerPinMaskX:
         return (output_tensor,)
 
 # Node registration
-FCPMASK_CLASS_MAPPINGS = {
+NODE_CLASS_MAPPINGS = {
     "FourCornerPinMaskX": FourCornerPinMaskX
 }
 
-FCPMASK_DISPLAY_NAME_MAPPINGS = {
+NODE_DISPLAY_NAME_MAPPINGS = {
     "FourCornerPinMaskX": "Four Corner Pin by Mask X"
 }

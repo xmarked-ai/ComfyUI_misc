@@ -167,6 +167,12 @@ class ImageCompositionX:
         image_a = image_a.float() if image_a.dtype != torch.float32 else image_a
         image_b = image_b.float() if image_b.dtype != torch.float32 else image_b
 
+        # Проверяем, есть ли альфа-канал в изображениях и отбрасываем его
+        if image_a.shape[-1] == 4:
+            image_a = image_a[..., :3]
+        if image_b.shape[-1] == 4:
+            image_b = image_b[..., :3]
+
         mix_in_ops = False
 
         # Проверка размеров маски A

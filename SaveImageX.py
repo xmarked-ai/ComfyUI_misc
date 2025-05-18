@@ -29,8 +29,8 @@ class SaveImageX:
                 "filename_prefix": ("STRING", {"default": "ComfyUI"}),
                 "subdirectory": ("STRING", {"default": "%date%"}),
                 "compress_level": ("INT", {"default": 4, "min": 0, "max": 9, "step": 1}),
-                "save_file": ("BOOLEAN", {"default": True, "label_on": "save", "label_off": "preview_only", "forceInput": False}),
-                "show_preview": ("BOOLEAN", {"default": True, "forceInput": False})
+                "show_preview": ("BOOLEAN", {"default": True, "forceInput": False}),
+                "save_file": ("BOOLEAN", {"default": True, "label_on": "save", "label_off": "preview_only", "forceInput": False})
             },
             "hidden": {
                 "prompt": "PROMPT", "extra_pnginfo": "EXTRA_PNGINFO"

@@ -41,10 +41,10 @@ app.registerExtension({
 
   async beforeRegisterNodeDef(nodeType, nodeData) {
     if (nodeData?.name === 'SplineImageMask') {
-      console.log("Registering SplineImageMask extension");
+      // console.log("Registering SplineImageMask extension");
 
       chainCallback(nodeType.prototype, "onNodeCreated", function () {
-        console.log("Node created!");
+        // console.log("Node created!");
 
         this.coordWidget = this.widgets.find(w => w.name === "coordinates");
         this.pointsStoreWidget = this.widgets.find(w => w.name === "points_store");

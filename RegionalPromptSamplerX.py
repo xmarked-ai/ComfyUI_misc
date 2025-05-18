@@ -305,10 +305,10 @@ class RegionalCFGGuider(comfy.samplers.CFGGuider):
 
 
 # Регистрируем ноду
-RPSAMPLER_CLASS_MAPPINGS = {
+NODE_CLASS_MAPPINGS = {
     "RegionalPromptSamplerX": RegionalPromptSamplerX
 }
 
-RPSAMPLER_DISPLAY_NAME_MAPPINGS = {
+NODE_DISPLAY_NAME_MAPPINGS = {
     "RegionalPromptSamplerX": "Regional Prompt Sampler X"
 }

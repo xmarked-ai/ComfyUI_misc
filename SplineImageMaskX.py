@@ -88,10 +88,10 @@ class SplineImageMask:
         return (mask_tensor,)
 
 # Register nodes
-NODE_CLASS_MAPPINGS = {
+SPLINEIMGMASK_CLASS_MAPPINGS = {
     "SplineImageMask": SplineImageMask,
 }
 
-NODE_DISPLAY_NAME_MAPPINGS = {
+SPLINEIMGMASK_NAME_MAPPINGS = {
     "SplineImageMask": "Spline Image Mask X",
 }

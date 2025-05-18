@@ -35,10 +35,10 @@ class ConstantColorX:
 
         return (color_tensor,)
 
-CONSTANTCOLORX_CLASS_MAPPINGS = {
+NODE_CLASS_MAPPINGS = {
     "ConstantColorX": ConstantColorX,
 }
 
-CONSTANTCOLORX_NAME_MAPPINGS = {
+NODE_DISPLAY_NAME_MAPPINGS = {
     "ConstantColorX": "Constant Color X",
 }

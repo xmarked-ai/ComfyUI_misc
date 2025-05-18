@@ -127,12 +127,12 @@ class ImageUntileSquare:
 
         # return(out, overlap_x, overlap_y, cols, rows, out_h, out_w)
 
-TILE_CLASS_MAPPINGS = {
+NODE_CLASS_MAPPINGS = {
     "ImageTileSquare": ImageTileSquare,
     "ImageUntileSquare": ImageUntileSquare,
 }
 
-TILE_NAME_MAPPINGS = {
+NODE_DISPLAY_NAME_MAPPINGS = {
     "ImageTileSquare": "Image Tile Square",
     "ImageUntileSquare": "Image Untile Square",
 }

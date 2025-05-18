@@ -44,11 +44,10 @@ class ConvexHullByMaskX:
 
         return (output_tensor,)
 
-# Регистрация ноды в ComfyUI
-CVHULLMASKX_CLASS_MAPPINGS = {
+NODE_CLASS_MAPPINGS = {
     "ConvexHullByMaskX": ConvexHullByMaskX
 }
 
-CVHULLMASK_NAME_MAPPINGS = {
+NODE_DISPLAY_NAME_MAPPINGS = {
     "ConvexHullByMaskX": "Convex Hull by Mask X"
 }
